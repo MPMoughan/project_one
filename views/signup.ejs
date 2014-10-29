@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CarHaus</title>
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+
+  <style>
+  .landing {
+    background: url
+    };
+  </style>
+
+</head>
+<body class="landing">
+
+<div class="container" text-center>
+<h1> Account Creation</h1>
+
+    <% if(typeof message !== 'undefined') {%>
+    <div class="alert alert-danger">
+    <%= message %>
+    </div>
+    <% }%>
+
+    <br>
+    <form action="/submit" method = "post">
+      <p>
+       <span><label for="username">Username: </label> <input type="text" name="username" id="username" autofocus value = <%=username %>></span>
+      </p>
+      <p>
+      <span><label for="password">Password: </label> <input type="password" name="password" id="password"></span>
+      </p>
+      <p>
+      </p>
+      <p>
+       <span><label for="email"> Email: </label> <input type="textarea" name="email" id="email"></span>
+      </p>
+       <p>
+       <span><label for="location"> Location: </label> <input type="textarea" name="location" id="location"></span>
+      </p>
+      <input type="submit" value="Sign up!" class = "btn btn-primary">
+      <br>
+      <a href="/login">Already have an account? Log in here</a>
+    </form>
+
+</div>
+</body>
+</html>

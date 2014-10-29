@@ -1,0 +1,26 @@
+<% include partials/header %>
+
+<!-- EDIT for USER -->
+
+<% if (typeof errMsg !== 'undefined') {%>
+  <h3 style="color:red"> <%= errMsg %> </h3>
+<% }; %>
+
+<h2>Edit your profile.</h2>
+
+  <form action="/profile/<%= user.id %>?_method=put" method="post">
+    Username: <input name="user[username]" value="<%= user.username %>">
+    <br>
+   <!--  <input name="user[password]" value="<%= user.password %>"> -->
+    Email: <input name="user[email]" value="<%= user.email %>">
+    <br>
+    Location: <input name="user[locaiton]" value="<%= user.location %>">
+    <br>
+    <input type="submit" value="Save">
+  </form>
+  <br>
+  <form action="/profile/<%= user.id %>?_method=delete/edit" method="post">
+    <input type="submit" value="Delete">
+  </form>
+
+  <% include partials/footer %>

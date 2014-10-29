@@ -1,0 +1,30 @@
+<% include partials/header %>
+
+<!-- SHOW for USER -->
+
+  <h2>A little info about <%= user.username %></h2>
+  <small><a href="/profile/<%=user.id%>/edit">edit profile</a></small>
+  <p>
+    <br>
+    Name: <%= user.username%>
+    <br>
+    Location: <%= user.location%>
+  </p>
+
+
+  <h3> Garage Board for <%= user.username%> </h3>
+
+    <% posts.forEach(function(post){ %>
+    <p>
+      <ul>
+        <li>
+          <a href="/profile/<%= user.id %>"> <%= post.placeholder %></a>
+          <a href="/profile/<%= user.id %>"> <%= post.title %></a>
+          <a href="/profile/<%= user.id %>"> <%= post.body %></a>
+        </li>
+      </ul>
+    </p>
+  <% }) %>
+
+
+<% include partials/footer %>

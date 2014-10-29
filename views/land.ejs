@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CarHaus</title>
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+
+  <style>
+
+ </style>
+
+</head>
+<body>
+
+<div class="container" text-center>
+
+<% if (typeof message !== 'undefined') { %>
+    <div class = "alert alert-success">
+      <%= message %>
+    </div>
+  <% } %>
+
+  <div class="jumbotron">
+    <h1>Welcome CarHaus</h1>
+    <br>
+    <h3>Please login to view or post!</h3>
+    <a href="/login" class = "btn btn-success btn-lg">Log in</a>
+    <h3>or</h3>
+    <h3> If you are new to CarHaus, please sign-up so you can being post your favroite cars!</h3>
+    <a href="/signup" class = "btn btn-primary btn-lg">Sign up</a>
+  </div>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<% include partials/header %>
+<!-- fancybox stylesheet -->
+<link rel="stylesheet" href="stylesheets/jquery.fancybox.css" type="text/css" media="screen" />
+
+<!-- jQuery library request -->
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+
+<!-- fancybox javascript file -->
+<script type="text/javascript" src="javascripts/jquery.fancybox.js"></script>
+
+<!-- fancybox jQuery -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".fancybox").fancybox();
+  });
+</script>
+
+<!-- parallax jQuery -->
+<script>
+  var jumboHeight = $('.jumbotron').outerHeight();
+function parallax(){
+    var scrolled = $(window).scrollTop();
+    $('.bg').css('height', (jumboHeight-scrolled) + 'px');
+}
+$(window).scroll(function(e){
+    parallax();
+});
+</script>
+
+<style>
+.row {
+  text-align: center;
+  }
+.thumbnail{
+    display: inline-block;
+    text-align: left;
+  }
+.bg {
+  background: url('images/BMW e30.jpg') no-repeat center center;
+  position: fixed;
+  width: 100%;
+  height: 350px; /*same height as jumbotron */
+  top:0;
+  left:0;
+  z-index: -1;
+  }
+.jumbotron {
+  height: 350px;
+  color: white;
+  text-shadow: #444 0 1px 1px;
+  background: transparent;
+  }
+</style>
+
+<!-- <div class="row"> -->
+  <div class="bg"></div>
+  <div class="col-md-9 col-md-offset-1">
+
+    <div class="jumbotron">
+      <h2>Welcome to CarHaus</h2>
+      <p>CarHaus is a community for car enthusiasts!!</p>
+      <span>
+      <a class="btn btn-primary btn-lg" href="/profile/<%=user.id%>">Your Garage</a>
+      <a class="btn btn-success btn-lg" href="/search">Search by Tags</a>
+      </span>
+    </div>
+
+
+  <div class="row">
+    <div class="col-xs-4">
+      <div class="thumbnail">
+        <% posts.forEach(function (post){ %>
+        <a class="fancybox" rel="group" href="https://lh6.googleusercontent.com/-ckpwCs9-ecc/AAAAAAAAAAI/AAAAAAAAAA4/yHMMhSe0w64/photo.jpg"> <img src="https://lh6.googleusercontent.com/-ckpwCs9-ecc/AAAAAAAAAAI/AAAAAAAAAA4/yHMMhSe0w64/photo.jpg"> </a>
+        <div class="caption">
+          <h3> <%= post.title %> </h3>
+          <p> <%= post.body %> </p>
+          <p><a href="#" class="btn btn-warning btn-sm" role="button">Like</a> <a href="#" class="btn btn-primary btn-xs" role="button">edit</a></p>
+         <% }) %>
+        </div>
+      </div>
+      </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
+<!-- </div> -->
+
+
+<% include partials/footer %>

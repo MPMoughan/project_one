@@ -1,0 +1,48 @@
+<% include partials/header %>
+
+
+<h2>Upload a photo</h2>
+
+<input type="file" id="files"/>
+<p id="status">Please select a file</p>
+<div style="border:1px solid gray;width:300px;"  id="preview"></div>
+
+<h2>Post Information</h2>
+
+<form method="POST" action="/posts/<%=user.id %>">
+    <input type="hidden" id="avatar_url" name="placeholder">
+    Title: <input type="text" name="title" placeholder="Username" /><br />
+    Body: <input type="text" name="body" placeholder="Full name" /><br /><br />
+
+    <input type="submit" value="Create a post" />
+</form>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/javascripts/lodash.min.js"></script>
+<script type="text/javascript" src="/javascripts/s3upload.js"></script>
+
+<script type="text/javascript">
+function s3_upload(){
+    var s3upload = new S3Upload({
+        file_dom_selector: '#files',
+        s3_sign_put_url: '/sign_s3',
+        onProgress: function(percent, message) {
+            $('#status').html('Upload progress: ' + percent + '% ' + message);
+        },
+        onFinishS3Put: function(public_url) {
+            $('#status').html('Upload completed. Uploaded to: '+ public_url);
+            $("#avatar_url").val(public_url);
+            $("#preview").html('<img src="'+public_url+'" style="width:300px;" />');
+        },
+        onError: function(status) {
+            $('#status').html('Upload error: ' + status);
+        }
+    });
+}
+
+$(document).ready(function() {
+    $('#files').on("change", s3_upload);
+});
+</script>
+</body>
+</html>

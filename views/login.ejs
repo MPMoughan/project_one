@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CarHaus</title>
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+
+  <style>
+  .landing {
+    background: src="file:///Users/amando/Documents/Random/Holding/Car%20Images/BMW%20e30.jpg"
+    };
+  </style>
+
+</head>
+<body class="landing">
+
+<div class="container" text-center>
+  <h1> Login </h1>
+
+  <% if (message.length > 0) { %>
+    <div class = "alert alert-danger">
+    <%= message %>
+    </div>
+  <% } %>
+    <form action="/login" method = "post">
+      <p>
+        <label for="user">Username:</label> <input type="text" name="username" id="user" autofocus
+      </p>
+      <p>
+        <label for="pass">Password:</label> <input type="password" name="password" id="pass">
+      </p>
+      <p>
+        <input type="submit" value="Log In" class ="btn btn-primary ">
+      </p>
+    </form>
+  <a href="/signup">Don't have an account? Create one here</a>
+
+</div>
+</body>
+</html>
