@@ -1,0 +1,26 @@
+<% include partials/header %>
+
+<% if (typeof errMsg !== 'undefined') {%>
+  <h3 style="color:red"> <%= errMsg %> </h3>
+<% }; %>
+
+<h2>Edit your post</h2>
+
+  <form action="/posts/<%= post.id %>?_method=put" method="post">
+      <p>
+        Photo: <input name="post[placeholder]" value="<%= post.placeholder %>">
+        <br>
+        Title: <input name="post[title]" value="<%= post.title %>">
+        <br>
+        Body: <input name="post[body]" value="<%= post.body %>">
+      </p>
+      <input type="submit" value="Save">
+  </form>
+
+  <p>
+    <form action="/posts/<%= post.id %>?_method=delete" method="post">
+      <input type="submit" value="Delete">
+    </form>
+  </p>
+
+<% include partials/footer %>

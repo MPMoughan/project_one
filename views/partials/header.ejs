@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <title>CarHaus</title>
 
+  <!-- Bootstrap theme style sheet -->
   <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+  <!-- fancybox stylesheet -->
+  <link rel="stylesheet" href="stylesheets/jquery.fancybox.css" type="text/css" media="screen" />
 
 </head>
 <body>
@@ -14,12 +17,14 @@
     <a class="navbar-brand" href="/home">CarHaus</a>
   </div>
 
-
+    <!-- Nav bar display with logic to display only if a user is logged in -->
     <ul class="nav navbar-nav">
-      <li><a href="/profile/<%= user.id %>">Profile</a></li>
+    <% if(typeof user  !== 'undefined') {%>
+      <li><a href="/profile/<%= user.id %>">Your Garage</a></li>
       <li><a href="/posts/<%= user.id %>/new">New Post</a></li>
        <li><a href="/search">Search</a></li>
     </ul>
+    <% } %>
 
     <form class="navbar-form navbar-right">
       <input type="text" class="form-control col-lg-8" placeholder="Search">
@@ -28,7 +33,6 @@
     <ul class="nav navbar-nav navbar-right">
       <li><a href="/logout">Logout</a></li>
     </ul>
-
 </div>
 
 

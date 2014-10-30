@@ -80,8 +80,10 @@ app.post('/submit', function(req,res){
   function(err){
     res.render("signup", {message: err.message, username: req.body.username});
   },
-  function(success){
-    res.render("login", {message: success.message});
+  function(){
+    passport.authenticate('local')(req,res,function(){
+      res.redirect("/home");
+    });
   });
 });
 
@@ -98,37 +100,11 @@ app.get('/logout', function(req,res){
 });
 
 
-
-////////// S3 //////////
-app.get('/sign_s3', function(req, res){
-    var object_name = req.query.s3_object_name;
-    var mime_type = req.query.s3_object_type;
-
-    var now = new Date();
-    var expires = Math.ceil((now.getTime() + 10000)/1000); // 10 seconds from now
-    var amz_headers = "x-amz-acl:public-read";
-
-    var put_request = "PUT\n\n"+mime_type+"\n"+expires+"\n"+amz_headers+"\n/"+S3_BUCKET+"/"+object_name;
-    var signature = crypto.createHmac('sha1', AWS_SECRET_KEY).update(put_request).digest('base64');
-    signature = encodeURIComponent(signature.trim());
-    signature = signature.replace('%2B','+');
-
-    var url = 'https://'+S3_BUCKET+'.s3.amazonaws.com/'+object_name;
-
-    var credentials = {
-        signed_request: url+"?AWSAccessKeyId="+AWS_ACCESS_KEY+"&Expires="+expires+"&Signature="+signature,
-        url: url
-    };
-    res.write(JSON.stringify(credentials));
-    res.end();
-});
-//// END ////
-
 // HOME PAGE - render latest posts
 app.get('/home', routeMiddleware.checkAuthentication, function (req, res){
-    db.Post.findAll().done(function (err, posts){
-      console.log("YOU FUCK UP?",posts)
-    res.render('home', {posts: posts, user: req.user});
+    db.Post.findAll({include: [db.Like,db.User],order:[ ["createdAt", "DESC"] ] }).done(function (err, posts){
+    console.log(posts)
+    res.render('home', {posts: posts, user: req.user,count:0});
     });
   });
 
@@ -136,25 +112,20 @@ app.get('/home', routeMiddleware.checkAuthentication, function (req, res){
 /////////// USER ///////////
 // USRE PROFILE PAGE
 app.get('/profile/:id', routeMiddleware.checkAuthentication, function (req,res){
-  console.log("User "+req.user.id);
-  if(req.user.id !== parseInt(req.params.id)){
-    res.redirect('/home');
-  }
-  else {
+
     db.User.find(req.params.id).done(function(err, user){
     if(err || user === null ){
       res.redirect('/home');
     }
-    else {
-    user.getPosts().done(function(err,posts){
-      res.render('profile', {posts:posts, user:user});
+    else
+    user.getPosts({include: [db.Like],order:[ ["createdAt", "DESC"] ] }).done(function(err,posts){
+      res.render('profile', {posts:posts, user:user, currentUser:req.user});
       });
-    }
    });
-  }
-});
+  });
 
 // EDIT user - direct to edit forms
+// Which logic to prevent another user from editing
 app.get('/profile/:id/edit', routeMiddleware.checkAuthentication, function (req, res) {
   // var id = req.params.id;
   // db.User.find(id).success(function(user){
@@ -238,7 +209,9 @@ app.get('/posts/:id/new', routeMiddleware.checkAuthentication, function (req, re
 app.post('/posts/:id', function (req, res) {
   var title = req.body.title;
   var body = req.body.body;
-  var placeholder = req.body.placeholder;
+  console.log("BODY:",req.body);
+  var placeholder = ("http://www.ucarecdn.com/"+req.body.placeholder+"/");
+
   db.Post.create({
     placeholder: placeholder,
     title: title,
@@ -257,47 +230,74 @@ app.post('/posts/:id', function (req, res) {
   });
 });
 
-// // EDIT POST
-// app.get('/posts/:id/edit', routeMiddleware.checkAuthentication, function (req, res) {
-//   //find our Post
-//   var id = req.params.id;
-//   db.Post.find(id).success(function(post){
-//       res.render('post', {post: post});
-//   });
-// });
+// EDIT POST
+app.get('/posts/:id/edit', routeMiddleware.checkAuthentication, function (req, res) {
+  db.Post.find(req.params.id).done(function(err,post){
+    if(post.UserId !== req.user.id){
+      res.redirect('/home');
+    }
+    else {
+      res.render('postedit', {post:post, user:req.user});
+    }
+  });
+});
 
-// // UPDATE post
-// app.put('/posts/:id', function (req, res) {
-//   var id = req.params.id;
-//   db.Post.find(id).success(function(post){
-//       post.updateAttributes
-//       ({title: req.body.post.title, body: req.body.post.body
-//       }).done(function(err, success){
-//       if (err){
-//         var errMsg = "Title must be at least 6 characters";
-//         res.render('/posts/:id/edit', {errMsg:errMsg, post: post});
-//         // why did you need to go through this
-//       }
-//       else {
-//     res.redirect('/profile');
-//       }
-//     });
-//   });
-// });
+// UPDATE post
+app.put('/posts/:id', function (req, res) {
+  var id = req.params.id;
+  db.Post.find(id).success(function(post){
+      post.updateAttributes
+      ({placeholder: req.body.post.placeholder, title: req.body.post.title, body: req.body.post.body
+      }).done(function(err, success){
+      if (err){
+        var errMsg = "Title must be at least 6 characters";
+        res.render('/posts/:id/edit', {errMsg:errMsg, post: post});
+        // why did you need to go through this
+      }
+      else {
+    res.redirect('/home');
+      }
+    });
+  });
+});
 
-// // DELETE
-// app.delete('/posts/:id', function (req, res) {
-//   var id = req.params.id;
-//   db.Post.find(id).success(function(post){
-//       post.destroy().success(function(){
-//       res.redirect('/Posts');
-//     });
-//   });
-// });
+// DELETE
+app.delete('/posts/:id', function (req, res) {
+  var id = req.params.id;
+  db.Post.find(id).success(function(post){
+      post.destroy().success(function(){
+      res.redirect('/home');
+    });
+  });
+});
 ///////// END OF POST METHODS
 
+// LIKE BUTTON
+app.post('/liked', function (req,res){
+  var userId = req.body.UserId;
+  var postId = req.body.PostId;
+  var currentUserId = req.user.id;
+  var isLiked;
 
-// SEARCH page - search for specific tags
+  if(req.body.unlike){
+    isLiked = false;
+  }
+  else{
+    isLiked = true;
+  }
+
+  db.Like.findOrCreate({
+    where: {
+    PostId: postId,
+    UserId: currentUserId,
+    isLiked: true
+    }
+  }).done(function (err,liked){
+      res.redirect('/home');
+  });
+});
+
+// SEARCH page - s2earch for specific tags
 app.get('/search', routeMiddleware.checkAuthentication, function (req, res, TagId){
   db.PostsTags.findAll({
     where: {
@@ -305,14 +305,14 @@ app.get('/search', routeMiddleware.checkAuthentication, function (req, res, TagI
     }
   }).done(function (err, posts) {
     console.log("HERE ARE OUR POSTS",posts);
-    res.render('search', {posts: posts});
+    res.render('search', {posts: posts, user:req.user});
   });
 });
 
 
 app.get('*', function (req,res){
   res.status(404);
-  res.render('404');
+  res.render('404',{user:req.user});
 });
 
 var server = app.listen(3000, function() {
