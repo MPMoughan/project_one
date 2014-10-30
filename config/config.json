@@ -10,7 +10,7 @@
     "dialect": "postgres"
   },
   "production": {
-    "database": "database_production",
+    "database": "postgres://wrfnotheaujkac:SPZV2afNQdhehS3kvzwdLoOf97@ec2-54-83-199-115.compute-1.amazonaws.com:5432/d9s395n6hqdlav",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }
