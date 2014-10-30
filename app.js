@@ -13,7 +13,8 @@ crypto = require("crypto"),
 http = require("http"),
 path = require("path"),
 methodOverride = require('method-override'),
-routeMiddleware = require('./config/routes');
+routeMiddleware = require('./config/routes'),
+nodemailer = require('nodemailer');
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -308,7 +309,6 @@ app.get('/search', routeMiddleware.checkAuthentication, function (req, res, TagI
     res.render('search', {posts: posts, user:req.user});
   });
 });
-
 
 app.get('*', function (req,res){
   res.status(404);
