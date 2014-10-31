@@ -302,6 +302,13 @@ app.get('/search', routeMiddleware.checkAuthentication, function (req, res, TagI
   });
 });
 
+app.get('/about', routeMiddleware.checkAuthentication, function (req, res){
+    db.Post.findAll().done(function (err, posts){
+    res.render('about', {posts: posts, user: req.user,count:0});
+    });
+  });
+
+
 app.get('*', function (req,res){
   res.status(404);
   res.render('404',{user:req.user});
