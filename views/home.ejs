@@ -1,17 +1,5 @@
 <% include partials/header %>
 
-<!-- fancybox stylesheet -->
-<link rel="stylesheet" href="stylesheets/jquery.fancybox.css" type="text/css" media="screen" />
-
-<!-- jQuery - google request -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<!-- jQuery library request -->
-<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-
-<!-- fancybox javascript file -->
-<script type="text/javascript" src="javascripts/jquery.fancybox.js"></script>
-
 <!-- fancybox jQuery -->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -31,51 +19,42 @@
   text-shadow: #444 0 1px 1px;
   color: white;
   }
-/*h3 {
-  margin: 270px top;
-}*/
-
 </style>
 
 
+<div class="jumbotron text-center">
+  <h1>|    Welcome to CarHaus    |</h1>
+  <h3>CarHaus is a community for car enthusiasts</h3>
 
-    <div class="jumbotron text-center">
-      <h1>|    Welcome to CarHaus    |</h1>
-      <h3>CarHaus is a community for car enthusiasts</h3>
-      <!-- <span> -->
-      <!-- <a class="btn btn-primary btn-lg" href="/profile/<%=user.id%>">Your Garage</a> -->
-      <!-- <a class="btn btn-success btn-lg" href="/search">Search by Tags</a> -->
-      <!-- </span> -->
+</div>
+<hr style="height:2px;border:none;color:#333;background-color:#333;" />
+<h3 style="text-center">Latest Posts</h3>
+
+<% posts.forEach(function (post){ %>
+  <div style = "float:left; margin:40px">
+    <a class="fancybox" rel="group" href="<%= post.placeholder %>">
+    <img src="<%= post.placeholder %>" style ="width:200px; height:200px;"></a>
+    <div class="caption text-center">
+      <h3> <%= post.title %> </h3>
+      <p> <%= post.body %> </p>
+      <p>
+        <!-- link to user's profile -->
+      <a href="/profile/<%=post.User.id%>">Created by <%= post.User.username %></a>
+      </p>
+      <p>
+      <!-- likes counter -->
+      Number of likes: <%= post.Likes.length %>
+      <form style="display:inline-block;" action="/liked" method = "POST">
+        <input type="hidden" name="UserId" value="<%= user.id%>">
+        <input type="hidden" name="PostId" value="<%= post.id%>">
+        <input type="submit" class = "btn btn-warning" value="Like it!">
+        <!-- logic for displaying edit button for logged in user -->
+        <% if(post.UserId === user.id){ %>
+        <a href="/posts/<%=post.id%>/edit" class="btn btn-primary" role="button">edit</a>
+        <% } %>
+      </form>
     </div>
-    <hr style="height:2px;border:none;color:#333;background-color:#333;" />
-    <h3 style="text-center">Latest Posts</h3>
-        <% posts.forEach(function (post){ %>
-        <div style = "float:left; margin:40px">
-            <a class="fancybox" rel="group" href="<%= post.placeholder %>">
-             <img src="<%= post.placeholder %>" style ="width:200px; height:200px;"></a>
-            <div class="caption text-center">
-              <h3> <%= post.title %> </h3>
-              <p> <%= post.body %> </p>
-
-              <p>
-                <!-- link to user's profile -->
-              <a href="/profile/<%=post.User.id%>">Created by <%= post.User.username %></a>
-              </p>
-              <p>
-
-              Number of likes: <%= post.Likes.length %>
-
-              <form style="display:inline-block;" action="/liked" method = "POST">
-                    <input type="hidden" name="UserId" value="<%= user.id%>">
-                    <input type="hidden" name="PostId" value="<%= post.id%>">
-                    <input type="submit" class = "btn btn-warning" value="Like it!">
-                  <!-- logic for displaying edit button for logged in user -->
-                  <% if(post.UserId === user.id){ %>
-                  <a href="/posts/<%=post.id%>/edit" class="btn btn-primary" role="button">edit</a>
-                  <% } %>
-              </form>
-            </div>
-        </div>
-        <% }) %>
+  </div>
+<% }) %>
 
 <% include partials/footer %>

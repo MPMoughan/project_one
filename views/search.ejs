@@ -1,7 +1,39 @@
 <% include partials/header %>
 
+<!-- CarQuery Javascript and jQuery -->
+<script type="text/javascript" src="http://www.carqueryapi.com/js/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.carqueryapi.com/js/carquery.0.3.3.js"></script>
 
-<h2 text-center>Search Page Coming Soon!</h2>
+<script>
+$(document).ready(function(){
+   var carquery = new CarQuery();
 
+   //Run the carquery init function to get things started:
+   carquery.init();
+
+   //Initialize the make, model, trim lists by providing their element IDs.
+   carquery.initMakeModelTrimList('make-list', 'model-list', 'trim-list', 'trim-data-list');
+
+   //Set minimum and maximum year options.
+   carquery.year_select_min=1950;
+   carquery.year_select_max=2014;
+});
+</script>
+
+<h1>Welcome to the Car Search Database!</h1>
+<br>
+<h4>Scroll through the list to select any car make and models for more information:</h4>
+<p>
+  <table>
+     <tr>
+        <td valign="top" id="make-list"></td>
+        <td valign="top"><div id="model-list" /></td>
+        <td valign="top"><div id="trim-list" /></td>
+     </tr>
+     <tr>
+         <td colspan="3"><div id="trim-data-list" /></td>
+     </tr>
+  </table>
+</p>
 
 <% include partials/footer %>

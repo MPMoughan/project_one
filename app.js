@@ -21,12 +21,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(express.static(__dirname + "/public"));
 
-/// AWS CODE BY ELIE /////
-var AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
-var AWS_SECRET_KEY = process.env.AWS_SECRET_KEY;
-var S3_BUCKET = process.env.S3_BUCKET;
-
-
 // setup session
 app.use(session( {
   secret: 'thisismysecretkey',
@@ -38,7 +32,6 @@ app.use(session( {
 // get passport started
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // include flash message
 app.use(flash());
@@ -53,13 +46,13 @@ passport.serializeUser(function (user, done){
 passport.deserializeUser(function (id, done){
   console.log("DESERIALIZED JUST RAN!");
   db.User.find({
-      where: {
-        id: id
-      }
-    })
-    .done(function(error,user){
-      done(error, user);
-    });
+    where: {
+      id: id
+    }
+  })
+  .done(function(error,user){
+    done(error, user);
+  });
 });
 
 // Middleware for preventing re-signin or logging-in again
@@ -111,6 +104,7 @@ app.get('/home', routeMiddleware.checkAuthentication, function (req, res){
 
 
 /////////// USER ///////////
+
 // USRE PROFILE PAGE
 app.get('/profile/:id', routeMiddleware.checkAuthentication, function (req,res){
 
@@ -126,11 +120,8 @@ app.get('/profile/:id', routeMiddleware.checkAuthentication, function (req,res){
   });
 
 // EDIT user - direct to edit forms
-// Which logic to prevent another user from editing
+// With logic to prevent another user from editing
 app.get('/profile/:id/edit', routeMiddleware.checkAuthentication, function (req, res) {
-  // var id = req.params.id;
-  // db.User.find(id).success(function(user){
-  //     res.render('edit', {user: user});
   if(req.user.id !== parseInt(req.params.id)){
     res.redirect('/home');
   }
@@ -273,6 +264,7 @@ app.delete('/posts/:id', function (req, res) {
 });
 ///////// END OF POST METHODS
 
+
 // LIKE BUTTON
 app.post('/liked', function (req,res){
   var userId = req.body.UserId;
@@ -298,7 +290,7 @@ app.post('/liked', function (req,res){
   });
 });
 
-// SEARCH page - s2earch for specific tags
+// SEARCH page - search for specific tags
 app.get('/search', routeMiddleware.checkAuthentication, function (req, res, TagId){
   db.PostsTags.findAll({
     where: {

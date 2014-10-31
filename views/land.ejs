@@ -6,32 +6,59 @@
 
   <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
 
-  <style>
-
+<style>
+  html, body {
+  height: 100%;
+  background-image: url("/images/audiTT.jpg");
+  background-position: relative;
+  background-repeat: no-repeat;
+  background-size: 100%
+  }
+.container {
+  height: 100%;
+  display: table;
+  vertical-align: middle;
+  text-align: center;
+  }
+.vertical-center-row {
+  display: table-cell;
+  vertical-align: middle;
+  }
+.login {
+  background-color: rgba(105,105,105, 0.5);
+  color: black;
+  padding: 10px;
+  }
  </style>
 
 </head>
 <body>
 
-<div class="container" text-center>
 
 <% if (typeof message !== 'undefined') { %>
-    <div class = "alert alert-success">
-      <%= message %>
-    </div>
-  <% } %>
-
-  <div class="jumbotron">
-    <h1>Welcome CarHaus</h1>
-    <br>
-    <h3>Please login to view or post!</h3>
-    <a href="/login" class = "btn btn-success btn-lg">Log in</a>
-    <h3>or</h3>
-    <h3> If you are new to CarHaus, please sign-up so you can being post your favroite cars!</h3>
-    <a href="/signup" class = "btn btn-primary btn-lg">Sign up</a>
+  <div class = "alert alert-success">
+    <%= message %>
   </div>
+<% } %>
 
-
+<div class="container">
+    <div class="row vertical-center-row">
+        <div class="col-lg-12"
+            <div class="row ">
+                <div class="login">
+                  <h1> Welcome to CarHaus </h1>
+                  <br>
+                  <h3>Please login to view or post!</h3>
+                  <a href="/login" class = "btn btn-success btn-lg">Log in</a>
+                  <h3>or</h3>
+                  <h3> If you are new to CarHaus, please sign-up so you can start posting your favroite cars!</h3>
+                  <a href="/signup" class = "btn btn-primary btn-lg">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 </body>
 </html>
