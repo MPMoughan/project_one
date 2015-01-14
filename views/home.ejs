@@ -1,39 +1,32 @@
 <% include partials/header %>
 
-<!-- fancybox jQuery -->
-<script type="text/javascript">
-  $(document).ready(function() {
-    $(".fancybox").fancybox();
-  });
-</script>
-
 <style>
 .jumbotron {
-  background: url('images/ferrariF40.jpg') no-repeat center center;
+  background: url('images/ferrariF40.jpg') no-repeat center;
   position: relative;
   width: 100%;
   height: 500px; /*same height as jumbotron */
   top:0;
   left:0;
   z-index: -1;
-  text-shadow: #444 0 1px 1px;
-  color: white;
+  text-shadow: 1px 1px 1px #000;
+  color: #6E6E6E;
   }
 </style>
 
 
-<div class="jumbotron text-center">
-  <h1>|    Welcome to CarHaus    |</h1>
-  <h3>CarHaus is a community for car enthusiasts</h3>
+<div class="jumbotron text-left">
+  <h1>Welcome to CarHaus</h1>
+  <h3>A community for car enthusiasts</h3>
 
 </div>
-<hr style="height:2px;border:none;color:#333;background-color:#333;" />
+<hr style="height:5px;border:none;color:#333;background-color:#333;" />
 <h3 style="text-center">Latest Posts</h3>
 
 <% posts.forEach(function (post){ %>
-  <div style = "float:left; margin:40px">
+  <div style = "float:left; margin:30px; padding:10px; border-width:1px; border-style:solid;">
     <a class="fancybox" rel="group" href="<%= post.placeholder %>">
-    <img src="<%= post.placeholder %>" style ="width:200px; height:200px;"></a>
+    <img src="<%= post.placeholder %>" style ="width:200px; height:auto;"></a>
     <div class="caption text-center">
       <h3> <%= post.title %> </h3>
       <p> <%= post.body %> </p>

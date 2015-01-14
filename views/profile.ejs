@@ -1,5 +1,20 @@
 <% include partials/header %>
 
+<!-- possible hacky solution to fancy box?! -->
+<!-- <% posts.forEach(function (post){ %> -->
+<!--  <% if(post.UserId === user.id){ %> -->
+<script type="text/javascript">
+      // $(document).ready(function() {
+      //  $("#fancybox-manual-c").click(function() {
+      //     $.fancybox.open('<%= post.placeholder %>');
+      //   });
+      //   console.log("It is alive!!!");
+      // });
+</script>
+<!--   <% } %>
+<% }) %> -->
+
+
 <!-- USER PROFILE PAGE -->
 
 <h2>A little info about <%= user.username %></h2>
@@ -15,12 +30,13 @@
 
 <h3><%= user.username%>'s Garage</h3>
 
+<!-- for loop to determine which user and diesplay all associated images -->
 <% posts.forEach(function (post){ %>
   <% if(post.UserId === user.id){ %>
-    <div style = "float:left; margin:40px">
-        <a class="fancybox" rel="group" href="<%= post.placeholder %>">
-        <img src="<%= post.placeholder %>" style ="width:200px; height:200px;"> </a>
-      <div class="caption text-center">
+    <div style = "float:left; margin:30px; padding:10px; border-width:1px; border-style:solid;">
+      <a class="fancybox" rel="group" href="<%= post.placeholder %>">
+      <img src="<%= post.placeholder %>" style ="width:200px; height:auto;"></a>
+    <div class="caption text-center">
         <h3> <%= post.title %> </h3>
         <p> <%= post.body %> </p>
         <p>
@@ -30,6 +46,8 @@
           <input type="hidden" name="UserId" value="<%= user.id%>">
           <input type="hidden" name="PostId" value="<%= post.id%>">
           <input type="submit" class = "btn btn-warning" value="Like it!">
+
+          <!-- logic to control edit / delete functionality -->
           <% if(currentUser.id === user.id){ %>
           <a href="/posts/<%=post.id%>/edit" class="btn btn-primary" role="button">edit</a>
           <% } %>
@@ -38,7 +56,5 @@
     </div>
   <% } %>
 <% }) %>
-
-
 
 <% include partials/footer %>
