@@ -1,5 +1,7 @@
 <% include partials/header %>
 
+<!-- MAIN HOME PAGE WHEN USER LOGINS IN -->
+
 <style>
 .jumbotron {
   background: url('images/ferrariF40.jpg') no-repeat center;
@@ -14,6 +16,24 @@
   }
 </style>
 
+<% posts.forEach(function (post){ %>
+  <% if(post.UserId === user.id){ %>
+    <script type="text/javascript">
+          $(document).ready(function() {
+           $(".fancybox").click(function(e) {
+            e.preventDefault();
+              $.fancybox.open("<img src=<%= post.placeholder %>>");
+            });
+            console.log("It is alive!!!");
+          });
+    </script>
+  <% } %>
+<% }) %>
+
+<!-- END of script / style -->
+
+
+<!-- HOME -->
 
 <div class="jumbotron text-left">
   <h1>Welcome to CarHaus</h1>
